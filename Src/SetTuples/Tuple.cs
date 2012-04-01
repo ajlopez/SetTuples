@@ -20,5 +20,12 @@
 
             set { this.values[index] = value; }
         }
+
+        public Tuple AddColumns(int incsize)
+        {
+            Tuple tuple = new Tuple(this.values.Length + incsize);
+            Array.Copy(this.values, tuple.values, this.values.Length);
+            return tuple;
+        }
     }
 }

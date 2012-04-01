@@ -29,6 +29,14 @@
             this.tuples = new List<Tuple>(set.tuples);
         }
 
+        private Set(Set set, IEnumerable<Column> newcolumns)
+        {
+            int incsize = newcolumns.Count();
+            this.columns = set.columns.Union(newcolumns).ToArray();
+            this.positions = set.positions;
+            this.tuples = set.tuples.Select(t => t.AddColumns(incsize)).ToList();
+        }
+
         public IEnumerable<Tuple> Tuples { get { return this.tuples; } }
 
         public IEnumerable<Column> Columns { get { return this.columns; } }
@@ -44,6 +52,11 @@
             set.tuples.Add(tuple);
 
             return set;
+        }
+
+        public Set AddColumns(IEnumerable<Column> newcolumns)
+        {
+            return new Set(this, newcolumns);            
         }
     }
 }

@@ -44,12 +44,49 @@ namespace SetTuples.Tests
 
             var result = set.AddTuple(values);
 
+            Assert.AreNotEqual(result, set);
+            Assert.AreEqual(0, set.Tuples.Count());
             Assert.IsNotNull(result.Tuples);
             Assert.AreEqual(1, result.Tuples.Count());
 
             Tuple tuple = result.Tuples.First();
             Assert.AreEqual("Adam", tuple[0]);
             Assert.AreEqual(800, tuple[1]);
+        }
+
+        [TestMethod]
+        public void AddColumns()
+        {
+            Column[] columns = new Column[] {
+                new Column("Name", ColumnType.String),
+                new Column("Age", ColumnType.Integer)
+            };
+
+            Set set = new Set(columns);
+
+            NameValues values = new NameValues();
+            values.Add("Name", "Adam");
+            values.Add("Age", 800);
+
+            set = set.AddTuple(values);
+
+            Column[] newcolumns = new Column[] {
+                new Column("Height", ColumnType.Integer),
+                new Column("Weight", ColumnType.Integer)
+            };
+
+            var result = set.AddColumns(newcolumns);
+
+            Assert.AreNotEqual(result, set);
+            Assert.IsNotNull(result.Tuples);
+            Assert.AreEqual(1, result.Tuples.Count());
+            Assert.AreEqual(4, result.Columns.Count());
+
+            Tuple tuple = result.Tuples.First();
+            Assert.AreEqual("Adam", tuple[0]);
+            Assert.AreEqual(800, tuple[1]);
+            Assert.IsNull(tuple[2]);
+            Assert.IsNull(tuple[3]);
         }
     }
 }
